@@ -1,0 +1,18 @@
+RewriteEngine On
+RewriteBase /
+AddType application/manifest+json .webmanifest
+
+# Verhindern dass data-Verzeichnis zugänglich ist
+RewriteRule ^data/ - [F,L]
+
+# Wichtige App-Routen immer über den zentralen Router führen
+# (auch wenn gleichnamige Verzeichnisse wie /admin existieren)
+RewriteRule ^admin/?$ index.php [QSA,L]
+RewriteRule ^admin/(codes|generate|print|scan|users)/?$ index.php [QSA,L]
+
+# Existierende Dateien und Verzeichnisse durchlassen
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Alles andere an index.php weiterleiten
+RewriteRule ^(.*)$ index.php [QSA,L]
